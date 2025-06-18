@@ -1,54 +1,40 @@
 <?php
 session_start();
-require '../database/db.php';
+
+require '../database/db.php'; // Include database connection
 
 $error = $success = "";
 
-// ✅ Ensure the user is logged in
+// ✅ Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/index.php");
-    exit();
-}
-
-$user_id = $_SESSION['user_id']; // Securely use the session user ID
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sanitize input
+    $error = "Unauthorized: Please log in first.";
+} elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize inputs
     $course_name = trim($_POST['course_name']);
     $course_code = trim($_POST['course_code']);
     $semester = trim($_POST['semester']);
+    $user_id = $_SESSION['user_id']; // ✅ Use dynamic user ID
 
-    // ✅ Validate input
     if (empty($course_name) || empty($course_code) || empty($semester)) {
-        $error = "❌ All fields are required.";
+        $error = "All fields are required.";
     } else {
-        // ✅ Insert into DB
+        // Insert course
         $stmt = $conn->prepare("INSERT INTO courses (course_name, course_code, semester, user_id) VALUES (?, ?, ?, ?)");
-        if (!$stmt) {
-            $error = "❌ Database error (prepare failed): " . htmlspecialchars($conn->error);
+        if ($stmt === false) {
+            $error = "Prepare failed: " . $conn->error;
         } else {
             $stmt->bind_param("sssi", $course_name, $course_code, $semester, $user_id);
             if ($stmt->execute()) {
                 $success = "✅ Course added successfully!";
-                // Optional redirect: header("Location: dashboard.php"); exit();
             } else {
-                $error = "❌ Insert failed: " . htmlspecialchars($stmt->error);
+                $error = "❌ Insert failed: " . $stmt->error;
             }
             $stmt->close();
         }
     }
 }
-
 $conn->close();
 ?>
-
-<!-- Feedback UI -->
-<?php if (!empty($error)): ?>
-    <div style="color: red;"><?= htmlspecialchars($error) ?></div>
-<?php elseif (!empty($success)): ?>
-    <div style="color: green;"><?= htmlspecialchars($success) ?></div>
-<?php endif; ?>
-
 
 
 <!DOCTYPE html>

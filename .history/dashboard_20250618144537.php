@@ -4,7 +4,7 @@ require 'database/db.php'; // Ensure this connects to your DB
 
 // ✅ Secure login check
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ./Auth/index.php");
+    header("Location: ./auth/index.php");
     exit();
 }
 
@@ -21,7 +21,7 @@ $user = $result->fetch_assoc();
 if (!$user) {
     // If user not found in DB, force logout
     session_destroy();
-    header("Location: ./Auth/index.php");
+    header("Location: ./auth/index.php");
     exit();
 } else {
     $name = $user['name'];

@@ -77,8 +77,8 @@ $conn->close();
             <input type="date" name="due_date" id="due_date" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Add Assignment</button>
-        <a href="../dashboard.php" class="btn btn-secondary">Back</a>
+        <!-- <button type="submit" class="btn btn-primary">Add Assignment</button> -->
+        <a href="dashboard.php" class="btn btn-secondary">Back</a>
     </form>
 </div>
 

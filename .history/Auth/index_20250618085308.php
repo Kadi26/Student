@@ -1,5 +1,4 @@
 <?php
-session_start();
 require '../database/db.php';
 
 $error = ""; // Initialize error message variable
@@ -12,8 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($email) || empty($password)) {
         $error = "Please fill in all fields.";
     } else {
+        // Hash the password before checking
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
         // Check if user exists by email
-        $sql = "SELECT id, email, password FROM users WHERE email = ? AND User_Role = 'admin'";
+        $sql = "SELECT id, email, password FROM users WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -24,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Verify password
             if (password_verify($password, $user['password'])) {
                 // Redirect with user ID in URL instead of using session
-                header("Location: ../dashboard.php?uid=" . urlencode($user['id']));
+                header("Location: ../portal.php?uid=" . urlencode($user['id']));
                 exit();
             } else {
                 $error = "Invalid email or password.";
@@ -38,13 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Management System</title>
+    <title>Student Login</title>
     <style>
         body {
             margin: 0;
@@ -114,15 +115,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="login-container">
         <form class="login-form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-            <h1>Admin Login</h1>
+            <h1>Student Login</h1>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
-            <p class="my-4">Login as <a href="index.php">Student</a> </p>
+            <p class="my-4">Login as <a href="admin.php">Admin</a> </p>
             <p class="error-message"><?php echo $error; ?></p>
         </form>
+
+          
     </div>
 </body>
 </html>

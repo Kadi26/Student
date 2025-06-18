@@ -21,7 +21,7 @@ $user = $result->fetch_assoc();
 if (!$user) {
     // If user not found in DB, force logout
     session_destroy();
-    header("Location: ./Auth/index.php");
+    header("Location: ./uth/index.php");
     exit();
 } else {
     $name = $user['name'];

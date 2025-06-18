@@ -1,5 +1,4 @@
 <?php
-session_start();
 require '../database/db.php';
 
 $error = ""; // Initialize error message variable

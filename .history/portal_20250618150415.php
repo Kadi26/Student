@@ -5,8 +5,9 @@ session_start();
 $id = $_GET['uid'];
 
 if(!isset($id)){
-    header('Location: ./Auth/index.php');
+    header('ocation: ./Auth/index.php');
 }
+
 
 include "./database/db.php";
 
@@ -14,6 +15,8 @@ $get_user = "SELECT * FROM users where id = $id";
 
 $result = mysqli_query($conn,$get_user);
 $user = mysqli_fetch_assoc($result);
+
+
 
 $name = $user['name'];
 

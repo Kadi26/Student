@@ -1,7 +1,5 @@
 <?php
-session_start();
-// echo "SESSION: ";
-// print_r($_SESSION);
+
 // Include database connection file
 include_once '../database/db.php';
 

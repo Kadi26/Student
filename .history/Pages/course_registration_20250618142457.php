@@ -1,7 +1,7 @@
 <?php
 session_start();
-// echo "SESSION: ";
-// print_r($_SESSION);
+echo "SESSION: ";
+print_r($_SESSION);
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

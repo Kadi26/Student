@@ -1,16 +1,17 @@
 <?php
 session_start();
-require 'database/db.php'; // Ensure this connects to your DB
 
-// ✅ Secure login check
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ./Auth/index.php");
+require 'database/db.php'; // Ensure this file contains the database connection
+
+// Check if the user is authenticated via a cookie or another method
+if (!isset($_GET['uid'])) {
+    header("Location: ./auth/index.php"); // Redirect to login if not authenticated
     exit();
 }
 
-$id = $_SESSION['user_id']; // Get the logged-in user ID
+$id = $_GET['uid']; // Get user email from cookie
 
-// ✅ Fetch user details
+// Fetch user details
 $query = "SELECT * FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id);
@@ -19,28 +20,27 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 if (!$user) {
-    // If user not found in DB, force logout
-    session_destroy();
-    header("Location: ./Auth/index.php");
+    header("Location: ./auth/index.php"); // Redirect if user not found
     exit();
-} else {
+}else{
     $name = $user['name'];
 }
 
-// ✅ Fetch stats
+// Fetch total users
 $userQuery = "SELECT COUNT(*) as total_users FROM users";
 $userResult = $conn->query($userQuery);
 $totalUsers = $userResult->fetch_assoc()['total_users'];
 
+// Fetch total courses
 $courseQuery = "SELECT COUNT(*) as total_courses FROM courses";
 $courseResult = $conn->query($courseQuery);
 $totalCourses = $courseResult->fetch_assoc()['total_courses'];
 
+// Fetch total assignments
 $assignmentQuery = "SELECT COUNT(*) as total_assignments FROM assignments";
 $assignmentResult = $conn->query($assignmentQuery);
 $totalAssignments = $assignmentResult->fetch_assoc()['total_assignments'];
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

@@ -78,7 +78,7 @@ $conn->close();
         </div>
 
         <button type="submit" class="btn btn-primary">Add Assignment</button>
-        <a href="../dashboard.php" class="btn btn-secondary">Back</a>
+        <a href="./set_assignmen" class="btn btn-secondary">Back</a>
     </form>
 </div>
 

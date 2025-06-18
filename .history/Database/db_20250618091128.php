@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $user = "root"; // Change if you have a different username
-$password = "smartcode"; // Change if you have a database password
+$password = ""; // Change if you have a database password
 $database = "student_management";
 
 $conn = new mysqli($host, $user, $password, $database);
